@@ -3,14 +3,15 @@ package responses
 import (
 	"net/http"
 
+	"shopsocial-backend/pkg/logger"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"shopsocial-backend/pkg/logger"
 )
 
 // APIResponse - Standard response format for both success & error
 type APIResponse struct {
-	Success bool        `json:"success"`            // Indicates if the request was successful
+	Success bool        `json:"success"`           // Indicates if the request was successful
 	Status  int         `json:"status"`            // HTTP status code
 	Message string      `json:"message,omitempty"` // Human-friendly message for the frontend
 	Data    interface{} `json:"data,omitempty"`    // Actual payload (for success)

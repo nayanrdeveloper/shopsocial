@@ -7,10 +7,10 @@ import (
 	"shopsocial-backend/pkg/logger"
 	"time"
 
-	"go.uber.org/zap"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.uber.org/zap"
 )
 
 type ProductRepository struct {

@@ -2,8 +2,9 @@ package products
 
 import (
 	"errors"
-	"go.mongodb.org/mongo-driver/v2/bson"
 	"shopsocial-backend/pkg/logger"
+
+	"go.mongodb.org/mongo-driver/v2/bson"
 
 	"go.uber.org/zap"
 )
