@@ -26,7 +26,7 @@ func ConnectDB() {
 
 	// Create a MongoDB client
 	client, _ := mongo.Connect(options.Client().ApplyURI("mongodb://localhost:27017"))
-	
+
 	// Verify the connection
 	if err := client.Ping(ctx, nil); err != nil {
 		log.Fatal("❌ Could not ping MongoDB:", err)

@@ -29,9 +29,9 @@ func main() {
 	api.RegisterRoutes(router)
 
 	router.NoRoute(func(c *gin.Context) {
-        // Return a standard JSON error for all invalid routes
-        responses.SendError(c, http.StatusNotFound, "Route not found", nil)
-    })
+		// Return a standard JSON error for all invalid routes
+		responses.SendError(c, http.StatusNotFound, "Route not found", nil)
+	})
 
 	// Start the server
 	port := ":8080"
