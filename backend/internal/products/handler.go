@@ -2,6 +2,7 @@ package products
 
 import (
 	"net/http"
+	"shopsocial-backend/pkg/constants"
 	"shopsocial-backend/pkg/logger"
 	"shopsocial-backend/pkg/responses"
 
@@ -22,18 +23,18 @@ func NewProductHandler(service *ProductService) *ProductHandler {
 func (h *ProductHandler) CreateProduct(c *gin.Context) {
 	var product Product
 	if err := c.ShouldBindJSON(&product); err != nil {
-		responses.SendError(c, http.StatusBadRequest, "Invalid request body", err)
+		responses.SendError(c, http.StatusBadRequest, constants.ErrInvalidRequest, err)
 		return
 	}
 
 	createdProduct, err := h.Service.CreateProduct(&product)
 	if err != nil {
-		responses.SendError(c, http.StatusInternalServerError, "Failed to create product", err)
+		responses.SendError(c, http.StatusInternalServerError, constants.FormatMessage(constants.ErrCreationFailed, constants.EntityProduct), err)
 		return
 	}
 
-	logger.Log.Info("Product created successfully", zap.String("id", createdProduct.ID.Hex()))
-	responses.SendCreated(c, "Product created successfully", createdProduct)
+	logger.Log.Info("Product created", zap.String("id", createdProduct.ID.Hex()))
+	responses.SendCreated(c, constants.FormatMessage(constants.SuccessCreated, constants.EntityProduct), createdProduct)
 }
 
 // READ
@@ -43,11 +44,11 @@ func (h *ProductHandler) GetProductByID(c *gin.Context) {
 
 	product, err := h.Service.GetProductByID(id)
 	if err != nil {
-		responses.SendError(c, http.StatusNotFound, "Product not found", err)
+		responses.SendError(c, http.StatusNotFound, constants.FormatMessage(constants.ErrNotFound, constants.EntityProduct), err)
 		return
 	}
 
-	responses.SendSuccess(c, "Product retrieved successfully", product)
+	responses.SendSuccess(c, constants.FormatMessage(constants.SuccessFetched, constants.EntityProduct), product)
 }
 
 // UPDATE
@@ -55,18 +56,18 @@ func (h *ProductHandler) UpdateProduct(c *gin.Context) {
 	id := c.Param("id")
 	var updateData bson.M
 	if err := c.ShouldBindJSON(&updateData); err != nil {
-		responses.SendError(c, http.StatusBadRequest, "Invalid update data", err)
+		responses.SendError(c, http.StatusBadRequest, constants.ErrInvalidRequest, err)
 		return
 	}
 
 	updatedProduct, err := h.Service.UpdateProduct(id, updateData)
 	if err != nil {
-		responses.SendError(c, http.StatusInternalServerError, "Failed to update product", err)
+		responses.SendError(c, http.StatusInternalServerError, constants.FormatMessage(constants.ErrUpdateFailed, constants.EntityProduct), err)
 		return
 	}
 
-	logger.Log.Info("Product updated successfully", zap.String("id", id))
-	responses.SendSuccess(c, "Product updated successfully", updatedProduct)
+	logger.Log.Info("Product updated", zap.String("id", id))
+	responses.SendSuccess(c, constants.FormatMessage(constants.SuccessUpdated, constants.EntityProduct), updatedProduct)
 }
 
 // DELETE
@@ -76,10 +77,10 @@ func (h *ProductHandler) DeleteProduct(c *gin.Context) {
 
 	err := h.Service.DeleteProduct(id)
 	if err != nil {
-		responses.SendError(c, http.StatusInternalServerError, "Failed to delete product", err)
+		responses.SendError(c, http.StatusInternalServerError, constants.FormatMessage(constants.ErrDeletionFailed, constants.EntityProduct), err)
 		return
 	}
 
-	logger.Log.Info("Product deleted successfully", zap.String("id", id))
-	responses.SendDeleted(c, "Product deleted successfully")
+	logger.Log.Info("Product deleted", zap.String("id", id))
+	responses.SendDeleted(c, constants.FormatMessage(constants.SuccessDeleted, constants.EntityProduct))
 }
