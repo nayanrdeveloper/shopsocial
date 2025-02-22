@@ -3,6 +3,9 @@ package products
 import (
 	"errors"
 	"go.mongodb.org/mongo-driver/v2/bson"
+	"shopsocial-backend/pkg/logger"
+
+	"go.uber.org/zap"
 )
 
 type ProductService struct {
@@ -15,11 +18,14 @@ func NewProductService(repo *ProductRepository) *ProductService {
 
 func (s *ProductService) CreateProduct(product *Product) (*Product, error) {
 	if product.Price <= 0 {
+		logger.Log.Warn("Product price is invalid", zap.Float64("price", product.Price))
 		return nil, errors.New("price must be greater than zero")
 	}
 	if product.Stock < 0 {
+		logger.Log.Warn("Product stock is negative", zap.Int("stock", product.Stock))
 		return nil, errors.New("stock cannot be negative")
 	}
+
 	return s.Repo.CreateProduct(product)
 }
 
